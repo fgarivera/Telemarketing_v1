@@ -1,4 +1,10 @@
 {
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/PopAI Telemarketing.html"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)\\.jsx",
