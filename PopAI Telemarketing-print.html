@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=1440"/>
+<title>PopAI · Telemarketing & Sales Execution — Print</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css?v=3"/>
+<style>
+  /* ============ Print-ready overrides ============ */
+  @page { size: 1440px 1024px; margin: 0; }
+
+  html, body, #root { height: auto !important; min-height: 100vh; background: #fff !important; }
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* App shell: lock to 1440 wide, let height grow naturally */
+  .app-shell {
+    width: 1440px !important;
+    height: auto !important;
+    min-height: 1024px !important;
+    overflow: visible !important;
+  }
+
+  /* Sidenav: stretch to match main height in print */
+  .sidenav {
+    height: auto !important;
+    min-height: 100% !important;
+  }
+
+  /* Main column: drop scroll, let content flow */
+  .main, .main-body {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+  .main-body { padding-bottom: 24px; }
+
+  /* Page wrapper inside route view */
+  .page {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+  .page-body, .page-body.no-pad {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Dashboard right column live feed — show all rows */
+  .dash-grid, .dash-grid .left, .dash-grid .right { min-height: 0 !important; }
+  .dash-grid .right .card { flex: none !important; height: auto !important; }
+  .feed-list { max-height: none !important; overflow: visible !important; }
+
+  /* Hide things that don't make sense on a static print */
+  .tweaks-panel,
+  .tweaks-toggle,
+  [data-tweaks-host],
+  .toast {
+    display: none !important;
+  }
+
+  /* Keep dropdowns closed in print */
+  .ws-menu, .lc-filter-dd, .dd { display: none !important; }
+
+  /* Remove pulse animations (they freeze mid-frame and look glitchy) */
+  @media print {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    body { background: #fff !important; }
+    .app-shell { box-shadow: none !important; }
+    /* Avoid splitting cards/sections across pages where possible */
+    .card, .kpi-card, .alert-card, .console-banner { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="screens-1.jsx"></script>
+<script type="text/babel" src="screens-2.jsx"></script>
+<script type="text/babel" src="screens-3.jsx"></script>
+<script type="text/babel" src="screens-4.jsx"></script>
+<script type="text/babel" src="screens-5.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+
+<script type="text/babel">
+/* Wait for fonts + React mount, then trigger print */
+(async () => {
+  const waitForRoot = () => new Promise(resolve => {
+    const check = () => {
+      const root = document.getElementById('root');
+      if (root && root.querySelector('.app-shell')) return resolve();
+      requestAnimationFrame(check);
+    };
+    check();
+  });
+  await waitForRoot();
+  if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch (e) {} }
+  await new Promise(r => setTimeout(r, 700));
+  window.print();
+})();
+</script>
+</body>
+</html>
