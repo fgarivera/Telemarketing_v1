@@ -1,0 +1,11 @@
+.claude/
+node_modules/
+.venv/
+dist/
+.next/
+__pycache__/
+*.zip
+.env*
+auth*
+*.key
+*.log
